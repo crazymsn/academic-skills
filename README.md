@@ -1,7 +1,3 @@
-欢迎关注B站及YouTube频道：深度云创科技，感兴趣的朋友欢迎加入新时代智能体交流社群
-
-客服微信：16773345788
-
 # Academic Skills
 
 Academic Skills is a curated collection of agent skills for research, science,
@@ -37,22 +33,64 @@ references, assets, or tests.
 
 ## Getting Started
 
-Install the full collection with an Agent Skills-compatible tool:
+Install only the skills you actually need. This repository contains many skills,
+and installing the full collection can make your agent noisier and harder to
+audit.
+
+### Using `npx skills`
+
+List available skills first:
 
 ```bash
-npx skills add crazymsn/academic-skills
+npx skills add crazymsn/academic-skills --list --full-depth
 ```
 
-If you use GitHub CLI skill support:
+Install one skill for Codex:
 
 ```bash
-gh skill install crazymsn/academic-skills
-gh skill install crazymsn/academic-skills scanpy
-gh skill install crazymsn/academic-skills --agent codex
+npx skills add crazymsn/academic-skills --skill scanpy --agent codex --copy -y --full-depth
 ```
 
-You can also install or copy individual directories from `scientific-skills/`
-into your agent's local skills directory.
+Install several skills:
+
+```bash
+npx skills add crazymsn/academic-skills --skill scanpy anndata scvi-tools --agent codex --copy -y --full-depth
+```
+
+Install to your user-level/global skill directory instead of the current project
+by adding `--global`:
+
+```bash
+npx skills add crazymsn/academic-skills --skill scanpy --agent codex --global --copy -y --full-depth
+```
+
+If you really want every skill for every detected agent:
+
+```bash
+npx skills add crazymsn/academic-skills --all --copy --full-depth
+```
+
+### Using GitHub CLI
+
+GitHub CLI skill support is still preview. Use GitHub CLI `gh` v2.90.0 or later,
+then install by exact path for this repository layout:
+
+```bash
+gh skill install crazymsn/academic-skills scientific-skills/scanpy/SKILL.md --agent codex --scope user
+```
+
+If your `gh skill` version discovers nested skills by name, this shorter form may
+also work:
+
+```bash
+gh skill install crazymsn/academic-skills scanpy --agent codex --scope user
+```
+
+### Manual Install
+
+You can also copy an individual directory from `scientific-skills/` into your
+agent's local skills directory. For example, copy
+`scientific-skills/scanpy/` as one complete skill directory.
 
 ## Security Notes
 
