@@ -1,7 +1,3 @@
-欢迎关注B站及YouTube频道：深度云创科技，感兴趣的朋友欢迎加入新时代智能体交流社群
-
-客服微信：16773345788
-
 # Academic Skills
 
 Academic Skills is a curated collection of agent skills for research, science,
@@ -37,17 +33,24 @@ references, assets, or tests.
 
 ## Getting Started
 
-Install only the skills you actually need. This repository contains many skills,
-and installing the full collection can make your agent noisier and harder to
-audit.
+### Install Everything
 
-### Using `npx skills`
+```bash
+npx skills add crazymsn/academic-skills --all --copy --full-depth
+```
 
-List available skills first:
+This installs every skill in the repository for every detected supported agent.
+For the shortest setup path, use this command.
+
+### Check Available Skills
+
+To preview the skill list without installing:
 
 ```bash
 npx skills add crazymsn/academic-skills --list --full-depth
 ```
+
+### Optional: Install Selected Skills
 
 Install one skill for Codex:
 
@@ -61,17 +64,10 @@ Install several skills:
 npx skills add crazymsn/academic-skills --skill scanpy anndata scvi-tools --agent codex --copy -y --full-depth
 ```
 
-Install to your user-level/global skill directory instead of the current project
-by adding `--global`:
+Install everything globally instead of into the current project:
 
 ```bash
-npx skills add crazymsn/academic-skills --skill scanpy --agent codex --global --copy -y --full-depth
-```
-
-If you really want every skill for every detected agent:
-
-```bash
-npx skills add crazymsn/academic-skills --all --copy --full-depth
+npx skills add crazymsn/academic-skills --all --global --copy --full-depth
 ```
 
 ### Using GitHub CLI
