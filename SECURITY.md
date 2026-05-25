@@ -10,7 +10,7 @@ agent-skill risk patterns.
 
 - No real GitHub tokens, private keys, or OpenAI-style production secrets were
   found in repository files.
-- Several fake tokens remain in `scientific-skills/autoskill/tests/`; they are
+- Several fake tokens remain in `academic-skills/autoskill/tests/`; they are
   test fixtures used to verify redaction behavior.
 - Many skills contain examples that install packages, call external APIs, read
   API keys from environment variables, or launch subprocesses. That is expected
@@ -59,20 +59,20 @@ For any skill you plan to use:
 3. Search for credential handling:
 
 ```bash
-rg -n -i "(api[_-]?key|secret|token|password|bearer)" scientific-skills/<skill>
+rg -n -i "(api[_-]?key|secret|token|password|bearer)" academic-skills/<skill>
 ```
 
 4. Search for command execution and installation paths:
 
 ```bash
-rg -n -i "(subprocess|os\.system|eval\(|exec\(|curl |wget |pip install|uv pip install|sudo)" scientific-skills/<skill>
+rg -n -i "(subprocess|os\.system|eval\(|exec\(|curl |wget |pip install|uv pip install|sudo)" academic-skills/<skill>
 ```
 
 5. Run a scanner if the skill will be used in a sensitive environment:
 
 ```bash
 uv pip install cisco-ai-skill-scanner
-skill-scanner scan scientific-skills/<skill> --use-behavioral
+skill-scanner scan academic-skills/<skill> --use-behavioral
 ```
 
 ## Publishing Notes

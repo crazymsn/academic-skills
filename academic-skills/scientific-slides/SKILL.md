@@ -191,7 +191,7 @@ Use the PPTX skill's html2pptx workflow to create slides that include:
 - Title and body text added separately
 - Professional layout and formatting
 
-See `scientific-skills/pptx/SKILL.md` for complete PPTX creation documentation.
+See `academic-skills/pptx/SKILL.md` for complete PPTX creation documentation.
 
 ---
 
@@ -501,7 +501,7 @@ python scripts/slides_to_pdf.py slides/*.png -o presentation.pdf
 
 **Best for**: Editable slides, custom designs, template-based workflows
 
-**Reference**: See `scientific-skills/pptx/SKILL.md` for complete documentation
+**Reference**: See `academic-skills/pptx/SKILL.md` for complete documentation
 
 Use Nano Banana Pro with `--visual-only` to generate images, then build PPTX with text.
 
@@ -565,7 +565,7 @@ Implement iterative improvement through visual inspection. For complete workflow
 python scripts/pdf_to_images.py presentation.pdf review/slide --dpi 150
 
 # Or use pptx skill's thumbnail tool
-python scientific-skills/pptx/scripts/thumbnail.py presentation.pptx review/thumb
+python academic-skills/pptx/scripts/thumbnail.py presentation.pptx review/thumb
 ```
 
 **Step 3: Systematic Inspection**
@@ -720,7 +720,7 @@ and discussion (slides 13-14) BEFORE creating slides.
 
 **Option A: PowerPoint (via PPTX skill)**
 1. Read `assets/powerpoint_design_guide.md`
-2. Read `scientific-skills/pptx/SKILL.md`
+2. Read `academic-skills/pptx/SKILL.md`
 3. Choose approach (programmatic or template-based)
 4. Create master slides with consistent design
 5. Build presentation following outline
@@ -793,7 +793,7 @@ and discussion (slides 13-14) BEFORE creating slides.
 python scripts/pdf_to_images.py presentation.pdf review/slides
 
 # Or create thumbnail grid
-python scientific-skills/pptx/scripts/thumbnail.py presentation.pptx review/grid
+python academic-skills/pptx/scripts/thumbnail.py presentation.pptx review/grid
 ```
 
 **Systematic Review**:
@@ -1032,7 +1032,7 @@ python scripts/pdf_to_images.py presentation.pdf output/slide --dpi 150
 
 ### PPTX Skill Scripts
 
-From `scientific-skills/pptx/scripts/`:
+From `academic-skills/pptx/scripts/`:
 - `thumbnail.py`: Create thumbnail grids
 - `rearrange.py`: Duplicate and reorder slides
 - `inventory.py`: Extract text content
@@ -1130,7 +1130,7 @@ If you need editable slides (e.g., for company templates):
 3. **Build PPTX** using the PPTX skill with generated images
 4. **Add text** separately using PPTX workflow
 
-See `scientific-skills/pptx/SKILL.md` for complete PowerPoint workflow.
+See `academic-skills/pptx/SKILL.md` for complete PowerPoint workflow.
 
 ## Summary: Key Principles
 

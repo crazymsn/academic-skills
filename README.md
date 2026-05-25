@@ -16,7 +16,7 @@ organization-specific promotion, install paths, and integration tracking.
 
 ## What Is Included
 
-This snapshot contains 139 skill directories under `scientific-skills/`.
+This snapshot contains 139 skill directories under `academic-skills/`.
 
 The collection covers:
 
@@ -80,7 +80,7 @@ GitHub CLI skill support is still preview. Use GitHub CLI `gh` v2.90.0 or later,
 then install by exact path for this repository layout:
 
 ```bash
-gh skill install crazymsn/academic-skills scientific-skills/scanpy/SKILL.md --agent codex --scope user
+gh skill install crazymsn/academic-skills academic-skills/scanpy/SKILL.md --agent codex --scope user
 ```
 
 If your `gh skill` version discovers nested skills by name, this shorter form may
@@ -92,9 +92,9 @@ gh skill install crazymsn/academic-skills scanpy --agent codex --scope user
 
 ### Manual Install
 
-You can also copy an individual directory from `scientific-skills/` into your
+You can also copy an individual directory from `academic-skills/` into your
 agent's local skills directory. For example, copy
-`scientific-skills/scanpy/` as one complete skill directory.
+`academic-skills/scanpy/` as one complete skill directory.
 
 ## Security Notes
 
@@ -109,13 +109,13 @@ To run your own scan:
 
 ```bash
 uv pip install cisco-ai-skill-scanner
-skill-scanner scan scientific-skills --use-behavioral
+skill-scanner scan academic-skills --use-behavioral
 ```
 
 ## Repository Layout
 
 ```text
-scientific-skills/      Skill directories
+academic-skills/      Skill directories
 docs/                   Generated indexes and ecosystem notes
 scan_skills.py          Security scan helper
 scan_pr_skills.py       Pull-request scan helper
