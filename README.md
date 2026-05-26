@@ -37,26 +37,102 @@ references, assets, or tests.
 
 ## Getting Started
 
-### Install Everything
+These instructions install the portable Agent Skills layer: each skill directory
+contains a `SKILL.md` file plus optional `scripts/`, `references/`, `assets/`,
+or `tests/` content. Agent-specific features such as Claude Code hooks,
+subagent forks, dynamic shell injection, Codex plugin packaging, and OpenCode
+permission policy are intentionally out of scope for this repository.
+
+### Check Compatibility
+
+Validate the repository before installing:
 
 ```bash
-npx skills add crazymsn/academic-skills --all --copy --full-depth
+python scripts/validate_compat.py
 ```
 
-This installs every skill in the repository for every detected supported agent.
-For the shortest setup path, use this command.
-
-### Check Available Skills
-
-To preview the skill list without installing:
+Preview available skills without installing:
 
 ```bash
 npx skills add crazymsn/academic-skills --list --full-depth
 ```
 
-### Optional: Install Selected Skills
+### Claude Code
 
-Install one skill for Codex:
+Install every skill for Claude Code into the current project:
+
+```bash
+npx skills add crazymsn/academic-skills --skill '*' --agent claude-code --copy -y --full-depth
+```
+
+Install globally for the current user:
+
+```bash
+npx skills add crazymsn/academic-skills --skill '*' --agent claude-code --global --copy -y --full-depth
+```
+
+Claude Code project installs use `.claude/skills/`; user installs use
+`~/.claude/skills/` unless `CLAUDE_CONFIG_DIR` points elsewhere.
+
+Verify a project install:
+
+```bash
+python scripts/validate_compat.py --agent claude --scope project
+```
+
+### Codex
+
+Install every skill for Codex into the current project:
+
+```bash
+npx skills add crazymsn/academic-skills --skill '*' --agent codex --copy -y --full-depth
+```
+
+Install globally for the current user:
+
+```bash
+npx skills add crazymsn/academic-skills --skill '*' --agent codex --global --copy -y --full-depth
+```
+
+Codex project installs use `.agents/skills/`. Depending on the Codex surface and
+installer version, user installs may be read from `~/.agents/skills/` or
+`~/.codex/skills/`; the compatibility checker inspects both.
+
+Verify a project install:
+
+```bash
+python scripts/validate_compat.py --agent codex --scope project
+```
+
+### OpenCode
+
+Install every skill for OpenCode into the current project:
+
+```bash
+npx skills add crazymsn/academic-skills --skill '*' --agent opencode --copy -y --full-depth
+```
+
+Install globally for the current user:
+
+```bash
+npx skills add crazymsn/academic-skills --skill '*' --agent opencode --global --copy -y --full-depth
+```
+
+OpenCode's native project path is `.opencode/skills/` and its native user path
+is `~/.config/opencode/skills/`. It also reads compatible skills from
+`.agents/skills/`, `.claude/skills/`, `~/.agents/skills/`, and
+`~/.claude/skills/`; the `npx skills` installer currently targets the shared
+`.agents/skills/` project path for OpenCode.
+
+Verify a project install:
+
+```bash
+python scripts/validate_compat.py --agent opencode --scope project
+```
+
+### Install Selected Skills
+
+Install one skill:
 
 ```bash
 npx skills add crazymsn/academic-skills --skill scanpy --agent codex --copy -y --full-depth
@@ -68,33 +144,17 @@ Install several skills:
 npx skills add crazymsn/academic-skills --skill scanpy anndata scvi-tools --agent codex --copy -y --full-depth
 ```
 
-Install everything globally instead of into the current project:
+Verify selected skills:
 
 ```bash
-npx skills add crazymsn/academic-skills --all --global --copy --full-depth
-```
-
-### Using GitHub CLI
-
-GitHub CLI skill support is still preview. Use GitHub CLI `gh` v2.90.0 or later,
-then install by exact path for this repository layout:
-
-```bash
-gh skill install crazymsn/academic-skills academic-skills/scanpy/SKILL.md --agent codex --scope user
-```
-
-If your `gh skill` version discovers nested skills by name, this shorter form may
-also work:
-
-```bash
-gh skill install crazymsn/academic-skills scanpy --agent codex --scope user
+python scripts/validate_compat.py --skill scanpy --skill anndata --skill scvi-tools
 ```
 
 ### Manual Install
 
-You can also copy an individual directory from `academic-skills/` into your
-agent's local skills directory. For example, copy
-`academic-skills/scanpy/` as one complete skill directory.
+You can also copy an individual directory from `academic-skills/` into an
+agent's local skills directory. For example, copy `academic-skills/scanpy/` as
+one complete skill directory.
 
 ## Security Notes
 
@@ -117,6 +177,7 @@ skill-scanner scan academic-skills --use-behavioral
 ```text
 academic-skills/      Skill directories
 docs/                   Generated indexes and ecosystem notes
+scripts/                Compatibility and install validation helpers
 scan_skills.py          Security scan helper
 scan_pr_skills.py       Pull-request scan helper
 pyproject.toml          Python project metadata
