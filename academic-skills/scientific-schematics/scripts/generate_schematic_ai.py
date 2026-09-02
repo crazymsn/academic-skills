@@ -33,6 +33,8 @@ except ImportError:
     print("Error: requests library not found. Install with: pip install requests")
     sys.exit(1)
 
+from atlas_image_provider import AtlasImageProvider
+
 # Try to load .env file from multiple potential locations
 def _load_env_file():
     """Load .env file from current directory or script directory only."""
@@ -116,13 +118,16 @@ IMPORTANT - NO FIGURE NUMBERS:
 - The diagram should contain only the visual content itself
 """
     
-    def __init__(self, api_key: Optional[str] = None, verbose: bool = False):
+    def __init__(self, api_key: Optional[str] = None, verbose: bool = False,
+                 provider: str = "openrouter", atlas_api_key: Optional[str] = None):
         """
         Initialize the generator.
         
         Args:
             api_key: OpenRouter API key (or use OPENROUTER_API_KEY env var)
             verbose: Print detailed progress information
+            provider: Image generation provider ("openrouter" or "atlas")
+            atlas_api_key: Atlas Cloud API key when provider is "atlas"
         """
         # Priority: 1) explicit api_key param, 2) environment variable, 3) .env file
         self.api_key = api_key or os.getenv("OPENROUTER_API_KEY")
@@ -142,6 +147,14 @@ IMPORTANT - NO FIGURE NUMBERS:
             )
         
         self.verbose = verbose
+        self.provider = provider
+        if provider not in {"openrouter", "atlas"}:
+            raise ValueError("provider must be 'openrouter' or 'atlas'")
+        self.atlas_provider = None
+        if provider == "atlas":
+            self.atlas_provider = AtlasImageProvider(
+                atlas_api_key or os.getenv("ATLASCLOUD_API_KEY", "")
+            )
         self._last_error = None  # Track last error for better reporting
         self.base_url = "https://openrouter.ai/api/v1"
         # Nano Banana 2 - Google's advanced image generation model
@@ -329,6 +342,16 @@ IMPORTANT - NO FIGURE NUMBERS:
             Image bytes or None if generation failed
         """
         self._last_error = None  # Reset error
+
+        if self.atlas_provider:
+            try:
+                image_data = self.atlas_provider.generate(prompt)
+                self._log(f"✓ Generated image with Atlas Cloud ({len(image_data)} bytes)")
+                return image_data
+            except Exception as e:
+                self._last_error = f"Atlas Cloud generation failed: {e}"
+                self._log(f"✗ {self._last_error}")
+                return None
         
         messages = [
             {
@@ -594,6 +617,8 @@ Generate an improved version that addresses all the critique points while mainta
             Dictionary with generation results and metadata
         """
         output_path = Path(output_path)
+        if self.atlas_provider and output_path.suffix.lower() not in {".jpg", ".jpeg"}:
+            raise ValueError("Atlas image generation currently requires a .jpg or .jpeg output path")
         output_dir = output_path.parent
         output_dir.mkdir(parents=True, exist_ok=True)
         
@@ -758,6 +783,7 @@ Note: Multiple iterations only occur if quality is BELOW the threshold.
 
 Environment:
   OPENROUTER_API_KEY    OpenRouter API key (required)
+  ATLASCLOUD_API_KEY    Required when --provider atlas
         """
     )
     
@@ -771,6 +797,8 @@ Environment:
                                "report", "grant", "thesis", "preprint", "default"],
                        help="Document type for quality threshold (default: default)")
     parser.add_argument("--api-key", help="OpenRouter API key (or set OPENROUTER_API_KEY)")
+    parser.add_argument("--provider", choices=["openrouter", "atlas"], default="openrouter",
+                       help="Image generation provider (default: openrouter)")
     parser.add_argument("-v", "--verbose", action="store_true",
                        help="Verbose output")
     
@@ -791,7 +819,11 @@ Environment:
         sys.exit(1)
     
     try:
-        generator = ScientificSchematicGenerator(api_key=api_key, verbose=args.verbose)
+        generator = ScientificSchematicGenerator(
+            api_key=api_key,
+            verbose=args.verbose,
+            provider=args.provider,
+        )
         results = generator.generate_iterative(
             user_prompt=args.prompt,
             output_path=args.output,
@@ -814,4 +846,3 @@ Environment:
 
 if __name__ == "__main__":
     main()
-
