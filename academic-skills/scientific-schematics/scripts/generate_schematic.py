@@ -69,6 +69,7 @@ Examples:
 
 Environment Variables:
   OPENROUTER_API_KEY    Required for AI generation
+  ATLASCLOUD_API_KEY    Required when --provider atlas
         """
     )
     
@@ -84,6 +85,8 @@ Environment Variables:
                        help="Maximum refinement iterations (default: 2, max: 2)")
     parser.add_argument("--api-key", 
                        help="OpenRouter API key (or use OPENROUTER_API_KEY env var)")
+    parser.add_argument("--provider", choices=["openrouter", "atlas"], default="openrouter",
+                       help="Image generation provider (default: openrouter)")
     parser.add_argument("-v", "--verbose", action="store_true",
                        help="Verbose output")
     
@@ -98,6 +101,10 @@ Environment Variables:
         print("\nSet it with:")
         print("  export OPENROUTER_API_KEY='your_api_key'")
         print("\nOr use --api-key flag")
+        sys.exit(1)
+    if args.provider == "atlas" and not os.getenv("ATLASCLOUD_API_KEY"):
+        print("Error: ATLASCLOUD_API_KEY environment variable not set")
+        print("\nSet it before using --provider atlas.")
         sys.exit(1)
     
     # Find AI generation script
@@ -121,6 +128,8 @@ Environment Variables:
     
     if args.verbose:
         cmd.append("-v")
+    if args.provider != "openrouter":
+        cmd.extend(["--provider", args.provider])
     
     # Execute — pass API key via environment to avoid exposure in process listings
     try:
@@ -136,4 +145,3 @@ Environment Variables:
 
 if __name__ == "__main__":
     main()
-

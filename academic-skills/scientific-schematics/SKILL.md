@@ -76,6 +76,27 @@ export OPENROUTER_API_KEY='your_api_key_here'
 
 Get an API key at: https://openrouter.ai/keys
 
+#### Optional Atlas Cloud image provider
+
+OpenRouter remains the default for both image generation and Gemini quality review. To use
+Atlas Cloud Nano Banana 2 for image generation while keeping the existing OpenRouter review,
+set both keys and select the provider explicitly:
+
+```bash
+export OPENROUTER_API_KEY='your_openrouter_key'
+export ATLASCLOUD_API_KEY='your_atlas_key'
+
+python scripts/generate_schematic.py \
+  "Transformer encoder-decoder architecture" \
+  -o figures/transformer.jpg \
+  --provider atlas
+```
+
+The Atlas path reads the live model catalog and input schema before each intentional generation,
+submits that paid generation POST exactly once, and only retries read-only prediction GETs with
+bounded backoff. Smart refinement remains unchanged: a below-threshold review may intentionally
+start the next generation iteration. Use a `.jpg` or `.jpeg` output path for the Atlas route.
+
 ### AI Generation Best Practices
 
 **Effective Prompts for Scientific Diagrams:**
@@ -612,5 +633,3 @@ python scripts/generate_schematic.py "your diagram description" -o output.png
 ---
 
 Use this skill to create clear, accessible, publication-quality diagrams that effectively communicate complex scientific concepts. The AI-powered workflow with iterative refinement ensures diagrams meet professional standards.
-
-
